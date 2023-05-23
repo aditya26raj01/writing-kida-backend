@@ -13,7 +13,7 @@ import { verifyRole } from "../Helpers/verifyRole.js";
 import postBlog from "../Controllers/Blog/Post.js";
 import getBlogs from "../Controllers/Blog/GetBlogs.js";
 import getUserBlogs from "../Controllers/Blog/GetUserBlogs.js";
-import { refreshToken } from "../Controllers/Auth/refresh.js";
+import refreshToken from "../Controllers/Auth/refresh.js";
 import getBlog from "../Controllers/Blog/GetBlog.js";
 
 router.post("/signup", [

@@ -2,7 +2,7 @@ import createError from "http-errors";
 import { signAccessToken, signRefreshToken, verifyRefreshToken } from "../../Helpers/jwt.js";
 import User from "../../Models/User.js";
 
-export const refreshToken = async (req, res, next) => {
+const refreshToken = async (req, res, next) => {
     try {
         var { refreshToken } = req.body;
         if (!refreshToken) throw createError(400, 'Bad Request', { msg: "Please provide all fields" });
@@ -19,3 +19,5 @@ export const refreshToken = async (req, res, next) => {
         next(error);
     }
 }
+
+export default refreshToken;
