@@ -32,7 +32,7 @@ router.post("/login", [
     body("password").matches(passwordRegex).withMessage("Password must contain minimum 6 characters, at least one uppercase letter, one lowercase letter, one number and one special character"),
 ], login);
 
-router.post("/post-blog", verifyAccessToken, verifyRole("USER"), [
+router.post("/post-blog", verifyAccessToken, verifyRole("BLOGGER"), [
     body("title").isLength({ min: 20 }).withMessage("Min 20 Max 50 Characters - Title"),
     body("tag").notEmpty().withMessage("Enter Valid Tag"),
     body("description").isLength({ min: 20 }).withMessage("Min 20 Max 100 Characters - Description"),
