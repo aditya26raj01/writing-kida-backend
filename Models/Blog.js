@@ -1,4 +1,4 @@
-import { model } from "mongoose";
+import { Schema, model } from "mongoose";
 
 const Blog = model("Blog", {
     title: {
@@ -13,17 +13,29 @@ const Blog = model("Blog", {
         type: String,
         required: true
     },
-    image: {
-        data: Buffer,
-        contentType: String,
+    content: {
+        type: String,
+        required: true
+    },
+    coverImage: {
+        type: String,
+        required: true
     },
     postedAt: {
         type: Date
+    },
+    featured: {
+        type: Boolean,
+        default: false
     },
     author: {
         type: Schema.Types.ObjectId,
         ref: 'user',
     },
+    deleted: {
+        type: Boolean,
+        default: false
+    }
 });
 
 export default Blog;

@@ -19,7 +19,11 @@ const login = async (req, res, next) => {
         var user = await User.findOne({ userName: login });
         if(!user) {
             user = await User.findOne({ email: login });
-            if (!user) throw createError(401, 'Unauthorized', { msg: "User Not Registered" });
+            if(!user) {
+                user = await User.findOne({ phone: login });
+                if (!user) throw createError(401, 'Unauthorized', { msg: "User Not Registered" });
+                else throw createError(401, 'Unauthorized', { msg: "Use UserName or Email to Login" }); 
+            }
         }
 
         const passwordCompare = await bcryptjs.compare(password, user.password);
@@ -27,11 +31,11 @@ const login = async (req, res, next) => {
 
         const accessToken = await signAccessToken(user);
         const refreshToken = await signRefreshToken(user);
-
+        user = await User.findOne({ userName: login }).select("-_id -__v -password -createdAt");
         res.send({
             status: true,
             message: "Login Successfull",
-            accessToken, refreshToken
+            accessToken, refreshToken, user
         })
 
     } catch (error) {

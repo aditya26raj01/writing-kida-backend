@@ -50,3 +50,13 @@ export const verifyAccessToken = (req, res, next) => {
         next();
     });
 }
+
+export const verifyRefreshToken = (refreshToken) => {
+    return new Promise((resolve, reject) => {
+        JWT.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, payload) => {
+            if (err) return reject(createError.Unauthorized());
+            const userID = payload.sub;
+            return resolve(userID);
+        })
+    })
+}

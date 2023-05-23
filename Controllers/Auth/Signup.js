@@ -32,7 +32,7 @@ const signup = async (req, res, next) => {
 
         res.send({
             status: true,
-            message: "Signup Successfull, Try Loggin In"
+            message: "Signup Successfull, Try Loggin In",
         })
 
     } catch (error) {
