@@ -17,6 +17,8 @@ import refreshToken from "../Controllers/Auth/Refresh.js";
 import getBlog from "../Controllers/Blog/GetBlog.js";
 import adminLogin from "../Controllers/Admin/AdminLogin.js";
 import deletBlog from "../Controllers/Blog/DeleteBlog.js";
+import getTop10 from "../Controllers/Blog/GetTop10.js";
+import getStockUpdates from "../Controllers/Blog/GetStockUpdates.js";
 
 router.post("/signup", [
     body("firstName").notEmpty().withMessage("Enter First Name").toUpperCase(),
@@ -50,6 +52,10 @@ router.post("/post-blog", verifyAccessToken, verifyRole("BLOGGER"), [
 router.get("/get-categories", getCategory);
 
 router.get("/get-blogs", getBlogs);
+
+router.get("/get-top-10-blogs", getTop10);
+
+router.get("/get-stock-updates", getStockUpdates);
 
 router.get("/get-user-blogs", verifyAccessToken, verifyRole("USER"), getUserBlogs);
 

@@ -39,6 +39,10 @@ const Blog = model("Blog", {
     inTop10: {
         type: Boolean,
         default: false
+    },
+    stockMarket: {
+        type: Boolean,
+        default: false
     }
 });
 
