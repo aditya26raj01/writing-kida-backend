@@ -1,8 +1,10 @@
 import mongoose from "mongoose";
 import Blog from "../../Models/Blog.js";
+import createError from 'http-errors';
 
 const getBlog = async (req, res, next) => {
     try {
+        if(!req.params.id) throw createError(400, 'Bad Request', { msg: "Enter Valid Blog ID" });
         var blog = await Blog.aggregate([
             { $match: { _id: new mongoose.Types.ObjectId(req.params.id) } },
             {

@@ -15,6 +15,8 @@ import getBlogs from "../Controllers/Blog/GetBlogs.js";
 import getUserBlogs from "../Controllers/Blog/GetUserBlogs.js";
 import refreshToken from "../Controllers/Auth/Refresh.js";
 import getBlog from "../Controllers/Blog/GetBlog.js";
+import adminLogin from "../Controllers/Admin/AdminLogin.js";
+import deletBlog from "../Controllers/Blog/DeleteBlog.js";
 
 router.post("/signup", [
     body("firstName").notEmpty().withMessage("Enter First Name").toUpperCase(),
@@ -32,13 +34,17 @@ router.post("/login", [
     body("password").matches(passwordRegex).withMessage("Password must contain minimum 6 characters, at least one uppercase letter, one lowercase letter, one number and one special character"),
 ], login);
 
-router.post("/post-blog", verifyAccessToken, [
+router.post("/login-admin", [
+    body("login").notEmpty().withMessage("Enter Valid Login Credentials"),
+    body("password").matches(passwordRegex).withMessage("Password must contain minimum 6 characters, at least one uppercase letter, one lowercase letter, one number and one special character"),
+], adminLogin);
+
+router.post("/post-blog", verifyAccessToken, verifyRole("BLOGGER"), [
     body("title").isLength({ min: 20 }).withMessage("Min 20 Max 50 Characters - Title"),
     body("tag").notEmpty().withMessage("Enter Valid Tag"),
     body("description").isLength({ min: 20 }).withMessage("Min 20 Max 100 Characters - Description"),
     body("content").isLength({ min: 100 }).withMessage("Min 100 Characters - Content"),
-    body("coverImage").notEmpty().withMessage("Upload Valid Cover Image"),
-    body("featured").notEmpty().withMessage("Enter Valid Featuring Status"),
+    body("coverImage").notEmpty().withMessage("Upload Valid Cover Image")
 ], postBlog);
 
 router.get("/get-categories", getCategory);
@@ -50,5 +56,7 @@ router.get("/get-user-blogs", verifyAccessToken, verifyRole("USER"), getUserBlog
 router.post("/refresh-token",refreshToken);
 
 router.get("/get-blog/:id",verifyAccessToken, verifyRole("USER"), getBlog);
+
+router.get("/delete-blog/:id",verifyAccessToken, verifyRole("BLOGGER"), deletBlog);
 
 export default router;

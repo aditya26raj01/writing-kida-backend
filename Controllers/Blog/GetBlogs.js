@@ -11,6 +11,8 @@ const getBlogs = async (req, res, next) => {
                     as: "author"
                 }
             }, 
+            {$match:{deleted: false}},
+            { $sort: { postedAt: -1 }},
             {$unwind: '$author'},
             {
                 $project: {

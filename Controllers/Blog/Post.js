@@ -12,15 +12,20 @@ const postBlog = async (req, res, next) => {
             })
             throw createError(400, 'Bad Request', { msg: error });
         }
-        const { title, description, content, tag, coverImage, featured } = req.body;
+        const { title, description, content, tag, coverImage, featured, inTop10 } = req.body;
         
         const blog = await Blog.create({
-            title, description, content, tag, coverImage, postedAt: Date.now(), featured, author: req.payload.sub
+            title, description, content, tag, coverImage,
+            postedAt: Date.now(),
+            featured: featured || false,
+            inTop10: inTop10 || false,
+            author: req.payload.sub
         });
 
         res.send({
             status: true,
-            message: "Blog Posted Successfully"
+            message: "Blog Posted Successfully",
+            blog
         })
 
     } catch (error) {

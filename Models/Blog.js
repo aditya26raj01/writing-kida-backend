@@ -24,15 +24,19 @@ const Blog = model("Blog", {
     postedAt: {
         type: Date
     },
-    featured: {
-        type: Boolean,
-        default: false
-    },
     author: {
         type: Schema.Types.ObjectId,
         ref: 'user',
     },
     deleted: {
+        type: Boolean,
+        default: false
+    },
+    featured: {
+        type: Boolean,
+        default: false
+    },
+    inTop10: {
         type: Boolean,
         default: false
     }
