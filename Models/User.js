@@ -1,4 +1,4 @@
-import { model } from "mongoose";
+import { Schema, model } from "mongoose";
 
 const User = model("User", {
     firstName: {
@@ -43,7 +43,17 @@ const User = model("User", {
     },
     createdAt: {
         type: Date
-    }
+    },
+    likedBlogs: [{
+        blog:{
+            type: Schema.Types.ObjectId,
+            ref: "blogs"
+        },
+        likedAt: {
+            type: Date
+        },
+        _id: false
+    }]
 });
 
 export default User;

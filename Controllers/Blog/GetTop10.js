@@ -23,6 +23,7 @@ const getTop10 = async (req, res, next) => {
                     featured: 1,
                     postedAt: 1,
                     _id: 1,
+                    likes:1,
                     "author.firstName": 1,
                     "author.lastName": 1,
                     "author.userName": 1,

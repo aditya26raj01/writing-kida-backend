@@ -19,6 +19,7 @@ import adminLogin from "../Controllers/Admin/AdminLogin.js";
 import deletBlog from "../Controllers/Blog/DeleteBlog.js";
 import getTop10 from "../Controllers/Blog/GetTop10.js";
 import getStockUpdates from "../Controllers/Blog/GetStockUpdates.js";
+import likeBlog from "../Controllers/Blog/LikeBlog.js";
 
 router.post("/signup", [
     body("firstName").notEmpty().withMessage("Enter First Name").toUpperCase(),
@@ -64,5 +65,7 @@ router.post("/refresh-token",refreshToken);
 router.get("/get-blog/:id",verifyAccessToken, verifyRole("USER"), getBlog);
 
 router.get("/delete-blog/:id",verifyAccessToken, verifyRole("BLOGGER"), deletBlog);
+
+router.get("/like-blog/:id",verifyAccessToken, verifyRole("USER"), likeBlog);
 
 export default router;

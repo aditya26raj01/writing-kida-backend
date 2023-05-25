@@ -16,6 +16,7 @@ const refreshToken = async (req, res, next) => {
             message: "Refresh Successfull",
             accessToken, refreshToken, user });
     } catch (error) {
+        console.log(error);
         next(error);
     }
 }

@@ -43,7 +43,11 @@ const Blog = model("Blog", {
     stockMarket: {
         type: Boolean,
         default: false
-    }
+    },
+    likes: {
+        type: Number,
+        default: 0
+    },
 });
 
 export default Blog;

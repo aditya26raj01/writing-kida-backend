@@ -44,7 +44,7 @@ export const verifyAccessToken = (req, res, next) => {
     JWT.verify(token, process.env.ACCESS_TOKEN_SCERET, (err, payload) => {
         if (err) {
             const message = err.name === 'JsonWebTokenError' ? 'Unauthorized' : err.message.toUpperCase();
-            return next(createError(401, 'Unauthorized', { msg: message }));
+            return next(createError(401, 'Unauthorized', { msg: "Login To Continue" }));
         }
         req.payload = payload;
         next();
