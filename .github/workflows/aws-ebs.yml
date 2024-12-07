@@ -50,7 +50,7 @@ jobs:
           aws elasticbeanstalk create-application-version \
             --application-name "${{ secrets.APPLICATION_NAME }}" \
             --version-label "${{ github.sha }}" \
-            --source-bundle ${{ github.sha }}.zip
+            --source-bundle "${{ github.sha }}.zip"
           
           aws elasticbeanstalk update-environment \
             --environment-name "${{ secrets.ENVIRONMENT_NAME }}" \
