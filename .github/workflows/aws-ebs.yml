@@ -48,7 +48,7 @@ jobs:
       - name: Deploy to Elastic Beanstalk
         run: |
           # Upload to Elastic Beanstalk's S3 bucket
-          aws s3 cp app.zip s3://elasticbeanstalk-${{ secrets.AWS_REGION }}-${{ secrets.AWS_REGION }}/${{ github.sha }}.zip
+          aws s3 cp ${{ github.sha }}.zip s3://elasticbeanstalk-${{ secrets.AWS_REGION }}-${{ secrets.AWS_REGION }}/${{ github.sha }}.zip
           
           aws elasticbeanstalk create-application-version \
             --application-name "${{ secrets.APPLICATION_NAME }}" \
