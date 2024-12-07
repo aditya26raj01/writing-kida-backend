@@ -34,7 +34,7 @@ jobs:
       # Step 4: Zip application files for deployment
       - name: Create ZIP file for deployment
         run: |
-          zip -r application.zip . -x ".git/*" "node_modules/*" "*.github/*"
+          zip -r ${{ github.sha }}.zip . -x ".git/*" "node_modules/*" "*.github/*"
 
       # Step 5: Configure AWS Credentials
       - name: Configure AWS credentials
@@ -50,7 +50,7 @@ jobs:
           aws elasticbeanstalk create-application-version \
             --application-name "${{ secrets.APPLICATION_NAME }}" \
             --version-label "${{ github.sha }}" \
-            --source-bundle S3Bucket="elasticbeanstalk-${{ secrets.AWS_REGION }}-${{ github.repository_owner }}",S3Key="${{ github.sha }}.zip"
+            --source-bundle S3Bucket="elasticbeanstalk-${{ secrets.AWS_REGION }}-${{ secrets.AWS_ACCOUNT_ID }}",S3Key="${{ github.sha }}.zip"
           
           aws elasticbeanstalk update-environment \
             --environment-name "${{ secrets.ENVIRONMENT_NAME }}" \
