@@ -10,33 +10,39 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # Step 1: Checkout the repository code
       - name: Checkout code
         uses: actions/checkout@v3
 
+      # Step 2: Set up Node.js (optional if your app needs building)
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 22  # Specify your Node.js version
+          node-version: 22  # Use your app's Node.js version
 
-      - name: Install dependencies
+      # Step 3: Install dependencies and zip the app
+      - name: Prepare application
         run: |
           npm install
-
-      - name: Zip application
-        run: |
           zip -r app.zip .
 
+      # Step 4: Upload zip to S3 and deploy to Elastic Beanstalk
       - name: Deploy to Elastic Beanstalk
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_REGION: ${{ secrets.AWS_REGION }}
         run: |
+          # Upload to Elastic Beanstalk's S3 bucket
+          aws s3 cp app.zip s3://elasticbeanstalk-ap-south-1-010438491383/app.zip
+
+          # Create a new application version
           aws elasticbeanstalk create-application-version \
             --application-name "writing-kida-backend" \
             --version-label "$(date +%Y%m%d%H%M%S)" \
             --source-bundle S3Bucket=elasticbeanstalk-ap-south-1-010438491383,S3Key=app.zip
 
+          # Deploy the new version to the environment
           aws elasticbeanstalk update-environment \
             --environment-name "Writing-kida-backend-env" \
             --version-label "$(date +%Y%m%d%H%M%S)"
