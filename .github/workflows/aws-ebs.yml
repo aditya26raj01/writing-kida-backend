@@ -47,10 +47,13 @@ jobs:
       # Step 6: Deploy to AWS Elastic Beanstalk
       - name: Deploy to Elastic Beanstalk
         run: |
+          # Upload to Elastic Beanstalk's S3 bucket
+          aws s3 cp app.zip s3://elasticbeanstalk-${{ secrets.AWS_REGION }}-${{ secrets.AWS_REGION }}/${{ github.sha }}.zip
+          
           aws elasticbeanstalk create-application-version \
             --application-name "${{ secrets.APPLICATION_NAME }}" \
             --version-label "${{ github.sha }}" \
-            --source-bundle "${{ github.sha }}.zip"
+            --source-bundle S3Bucket=elasticbeanstalk-${{ secrets.AWS_REGION }}-${{ secrets.AWS_REGION }},S3Key=${{ github.sha }}.zip
           
           aws elasticbeanstalk update-environment \
             --environment-name "${{ secrets.ENVIRONMENT_NAME }}" \
