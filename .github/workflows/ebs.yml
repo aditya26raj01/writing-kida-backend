@@ -1,0 +1,42 @@
+name: Deploy to Elastic Beanstalk
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 22  # Specify your Node.js version
+
+      - name: Install dependencies
+        run: |
+          npm install
+
+      - name: Zip application
+        run: |
+          zip -r app.zip .
+
+      - name: Deploy to Elastic Beanstalk
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: ${{ secrets.AWS_REGION }}
+        run: |
+          aws elasticbeanstalk create-application-version \
+            --application-name "writing-kida-backend" \
+            --version-label "$(date +%Y%m%d%H%M%S)" \
+            --source-bundle S3Bucket=elasticbeanstalk-ap-south-1-010438491383,S3Key=app.zip
+
+          aws elasticbeanstalk update-environment \
+            --environment-name "Writing-kida-backend-env" \
+            --version-label "$(date +%Y%m%d%H%M%S)"
