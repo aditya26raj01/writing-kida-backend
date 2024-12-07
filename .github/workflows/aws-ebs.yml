@@ -30,7 +30,6 @@ jobs:
       - name: Install Dependencies
         run: |
           npm install
-          npm run build # Run any necessary build commands (for Next.js, React, etc.)
 
       # Step 4: Zip application files for deployment
       - name: Create ZIP file for deployment
