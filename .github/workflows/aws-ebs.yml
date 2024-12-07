@@ -48,12 +48,12 @@ jobs:
       - name: Deploy to Elastic Beanstalk
         run: |
           aws elasticbeanstalk create-application-version \
-            --application-name "${{ env.APPLICATION_NAME }}" \
+            --application-name "${{ secrets.APPLICATION_NAME }}" \
             --version-label "${{ github.sha }}" \
             --source-bundle S3Bucket="elasticbeanstalk-${{ secrets.AWS_REGION }}-${{ github.repository_owner }}",S3Key="${{ github.sha }}.zip"
           
           aws elasticbeanstalk update-environment \
-            --environment-name "${{ env.ENVIRONMENT_NAME }}" \
+            --environment-name "${{ secrets.ENVIRONMENT_NAME }}" \
             --version-label "${{ github.sha }}"
 
       # Optional: Notify the team about deployment success
