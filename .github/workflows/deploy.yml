@@ -29,6 +29,6 @@ jobs:
       - name: Deploy to EC2
         run: |
           aws deploy create-deployment \
-            --application-name express-app \
-            --deployment-group-name express-app-group \
-            --s3-location bucket=my-express-app-deploy,key=deploy.zip,bundleType=zip
+            --application-name writing-kida-backend \
+            --deployment-group-name writing-kida-backend-deployment-group \
+            --s3-location bucket=alexis-911,key=deploy.zip,bundleType=zip
