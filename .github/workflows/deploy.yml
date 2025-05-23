@@ -1,34 +1,39 @@
-name: Deploy Express App
+name: Deploy to Elastic Beanstalk
 
 on:
   push:
     branches:
       - main
-      - master
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v3
+      - name: Checkout source code
+        uses: actions/checkout@v2
 
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v2
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ap-south-1
+          node-version: "22"
 
-      - name: Zip the Project
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run tests
+        run: npm test
+
+      - name: Generate deployment package
         run: zip -r deploy.zip . -x '*.git*'
 
-      - name: Upload to S3
-        run: aws s3 cp deploy.zip s3://alexis-911/
-
-      - name: Deploy to EC2
-        run: |
-          aws deploy create-deployment \
-            --application-name writing-kida-backend \
-            --deployment-group-name writing-kida-backend-deployment-group \
-            --s3-location bucket=alexis-911,key=deploy.zip,bundleType=zip
+      - name: Deploy to Elastic Beanstalk
+        uses: einaregilsson/beanstalk-deploy@v21
+        with:
+          aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          application_name: writing-kida-backend
+          environment_name: Writing-kida-backend-env
+          version_label: ${{ github.sha }}
+          region: ap-south-1
+          deployment_package: deploy.zip
